@@ -27,19 +27,19 @@ namespace customapilab
 
             var context = localPluginContext.PluginExecutionContext;
 
-            // TODO: Implement your custom business logic
+            string input = (string)context.InputParameters["StringIn"];
 
-            // Check for the entity on which the plugin would be registered
-            //if (context.InputParameters.Contains("Target") && context.InputParameters["Target"] is Entity)
-            //{
-            //    var entity = (Entity)context.InputParameters["Target"];
+            string pattern = (string)context.InputParameters["Pattern"];
 
-            //    // Check for entity name on which this plugin would be registered
-            //    if (entity.LogicalName == "account")
-            //    {
+            ITracingService tracingService = (ITracingService)localPluginContext.ServiceProvider.GetService(typeof(ITracingService));
 
-            //    }
-            //}
+            tracingService.Trace("Provided input: " + input);
+
+            var result = Regex.Match(input, pattern);
+
+            tracingService.Trace("Matching result: " + result.Success);
+
+            context.OutputParameters["Matched"] = result.Success;
         }
     }
 }
